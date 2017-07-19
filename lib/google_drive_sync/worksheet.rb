@@ -11,11 +11,31 @@ module GoogleDriveSync
 
       @spreadsheet = session.spreadsheet_by_key(@key)
       @worksheet = @spreadsheet.worksheet_by_gid(@gid) if @gid
-      @worksheet = @spreadsheet.worksheet_by_gid(@title) if @title
-      # unless @worksheet
-      #   @title = "New Worksheet"
-      #   @worksheet = @spreadsheet.add_worksheet(@title)
-      # end
+      @worksheet = @spreadsheet.worksheet_by_title(@title) if @title
+    end
+
+    def exists?
+      @worksheet.present?
+    end
+
+    def create
+      @title ||= "New Worksheet"
+      @worksheet = @spreadsheet.add_worksheet(@title)
+    end
+
+    def clear
+      @worksheet.delete if @worksheet
+      create
+      reset_index
+    end
+
+    def reset_index
+      @index = 1
+    end
+
+    def add_row(row)
+      update_cells(@index, 1, [row])
+      @index += 1
     end
 
     def download_to(file)
