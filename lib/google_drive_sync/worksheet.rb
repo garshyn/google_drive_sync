@@ -41,7 +41,7 @@ module GoogleDriveSync
     def download_to(file)
       puts 'Downloading...'
       to_csv file
-      puts "Written to #{file}"
+      puts "Saved to #{file}"
     end
 
     def update_cells(row, col, data)
