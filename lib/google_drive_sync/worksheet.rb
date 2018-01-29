@@ -40,8 +40,8 @@ module GoogleDriveSync
 
     def download_to(file)
       puts 'Downloading...'
-      to_csv file
-      puts "Saved to #{file}"
+      result = to_csv file
+      puts "Saved to #{file}" if result
     end
 
     def update_cells(row, col, data)
@@ -53,6 +53,10 @@ module GoogleDriveSync
     end
 
     def to_csv(file)
+      if @worksheet.nil?
+        puts "ERROR: Worksheet not found"
+        return false
+      end
       @worksheet.export_as_file(file)
     end
 
