@@ -54,7 +54,7 @@ module GoogleDriveSync
 
     def to_csv(file)
       if @worksheet.nil?
-        puts "ERROR: Worksheet not found"
+        puts "ERROR: #{@gid} #{@title} Worksheet not found"
         return false
       end
       @worksheet.export_as_file(file)
