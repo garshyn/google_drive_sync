@@ -6,10 +6,11 @@ module GoogleDriveSync
     end
 
     attr_reader :spreadsheet, :key
+
     delegate :worksheet_by_gid, :worksheet_by_title, :add_worksheet, :worksheets, to: :spreadsheet
 
     def to_yaml
-      puts "settings:"
+      puts 'settings:'
       puts "  spreadsheet_key: #{key}"
       worksheets.each do |w|
         puts "  #{w.title}_gid: #{w.gid}"
