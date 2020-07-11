@@ -4,33 +4,32 @@ Used for syncing translations and seeds in Rails projects.
 Based on `google_drive` gem.
 
 Requires `google_config.json` file in the root folder. It will be generated on the first call.
+Supports service account configuration which should be returned by `google_config_file` method.
 
 ## Tasks
 
-1. Download
+1. Url
 
-`rake gds:download[spreadsheet_key,worksheet_title]`
+`rake google:url`
 
-Requires `spreadsheet_key` and `worksheet_title`
+Print custom or base url
 
-Downloads a worksheet to temporary file
+2. Open
 
-2. Seed
+`rake google:open`
 
-`rake gds:seed[spreadsheet_key,worksheet_title]`
+Open custom or base spreadsheet in browser
 
-Requires `spreadsheet_key` and `worksheet_title`
+3. Describe
 
-Downloads a worksheet to temporary file. Creates or updates records in Settings table
+`rake google:describe`
 
-3. Url
+Show worksheets titles from both base and custom spreadsheets
 
-`rake gds:url`
+4. Download
 
-Print default url
+`rake google:download[title,spreadsheet_key]`
 
-4. Open
+Requires `title` of a worksheet
 
-`rake gds:open`
-
-Open default Google Spreadsheet in browser
+Downloads a worksheet to a temporary file
