@@ -28,8 +28,9 @@ namespace :google do
     ).download_to(file)
   end
 
-  def google_url(spreadsheet: custom_spreadsheet_key || base_spreadsheet_key)
-    "https://docs.google.com/spreadsheets/d/#{spreadsheet}/edit"
+  def google_url(spreadsheet: custom_spreadsheet_key || base_spreadsheet_key, gid: nil)
+    gid_param = "#gid=#{gid}" if gid
+    "https://docs.google.com/spreadsheets/d/#{spreadsheet}/edit#{gid_param}"
   end
 
   def base_spreadsheet_key
