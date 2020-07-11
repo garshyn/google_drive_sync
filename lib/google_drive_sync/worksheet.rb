@@ -2,27 +2,37 @@ module GoogleDriveSync
   class Worksheet
     def initialize(spreadsheet_key, title: 'New Worksheet', gid: nil, session: ::GoogleDriveSync.default_session)
       @title = title
+      @gid = gid
 
       @spreadsheet = Spreadsheet.new(spreadsheet_key, session: session)
       @worksheet = spreadsheet.worksheet_by_gid(gid) if gid
       @worksheet = spreadsheet.worksheet_by_title(title) if title
     end
 
-    attr_reader :spreadsheet, :worksheet, :title
+    def self.find(title, custom_spreadsheet: custom_spreadsheet_key, session:)
+      title_for_gid = title.split('.').last
+      worksheet_gid = custom_worksheet_gid(title_for_gid)
+      spreadsheet_options = worksheet_gid.present? ? { gid: worksheet_gid } : { title: title }
+      custom_worksheet = new(custom_spreadsheet, spreadsheet_options.merge(session: session))
+      return custom_worksheet if custom_worksheet.exists?
+
+      worksheet_gid = base_worksheet_gid(title_for_gid)
+      spreadsheet_options = worksheet_gid.present? ? { gid: worksheet_gid } : { title: title }
+
+      new(base_spreadsheet_key, spreadsheet_options.merge(session: session))
+    end
+
+    attr_reader :spreadsheet, :worksheet, :title, :gid
+
     delegate :save, :update_cells, to: :worksheet
 
     def exists?
       worksheet.present?
     end
 
-    def create
-      @worksheet = spreadsheet.add_worksheet(title)
-    end
-
     def clear
-      worksheet.delete if worksheet
-      create
-      reset_index
+      worksheet&.delete
+      @worksheet = spreadsheet.add_worksheet(title)
     end
 
     def download_to(file)
