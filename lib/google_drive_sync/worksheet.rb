@@ -13,8 +13,10 @@ module GoogleDriveSync
       title_for_gid = title.split('.').last
       worksheet_gid = custom_worksheet_gid(title_for_gid)
       spreadsheet_options = worksheet_gid.present? ? { gid: worksheet_gid } : { title: title }
-      custom_worksheet = new(custom_spreadsheet, spreadsheet_options.merge(session: session))
-      return custom_worksheet if custom_worksheet.exists?
+      if custom_spreadsheet
+        custom_worksheet = new(custom_spreadsheet, spreadsheet_options.merge(session: session))
+        return custom_worksheet if custom_worksheet.exists?
+      end
 
       worksheet_gid = base_worksheet_gid(title_for_gid)
       spreadsheet_options = worksheet_gid.present? ? { gid: worksheet_gid } : { title: title }
